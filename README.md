@@ -20,6 +20,30 @@ intent
 -> training target
 ```
 
+## Repository Route
+
+The repo carries the control route as a first-class artifact, not only as CLI
+behavior or agent instructions:
+
+```text
+routes/session-entry.route.json
+```
+
+That route is the canonical session-entry path for this workspace:
+
+```text
+fresh session / control question
+-> project AGENTS session-entry state
+-> TP(intent, recovered_state?, op?, gate?)
+-> transition.packet.v0
+-> answer-card | patch-card | WorkManifest | ControlPacket
+-> hold effects unless explicitly admitted with rollback, evidence, claim boundary, and receipt
+```
+
+`agent-os` remains the runnable packet/route/gate demo. The repository route
+manifest is the inspectable contract that tells future sessions how to enter
+the repo without re-running a history bootstrap.
+
 ## Usage
 
 ```bash
