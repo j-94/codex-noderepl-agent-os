@@ -1,0 +1,23 @@
+{
+  "name": "codex-tape",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Immutable in-context machine for Codex with virtual tools first.",
+  "main": "./src/core.js",
+  "exports": {
+    ".": "./src/core.js",
+    "./bridge": "./src/bridge.js",
+    "./repl": "./src/repl.js",
+    "./surface": "./src/surface.js",
+    "./tools": "./src/tools.js"
+  },
+  "bin": {
+    "codex-tape": "./agent-os",
+    "agent-os": "./agent-os"
+  },
+  "scripts": {
+    "test": "node test/core.test.js",
+    "selftest": "node agent-os selftest"
+  },
+  "license": "UNLICENSED"
+}
