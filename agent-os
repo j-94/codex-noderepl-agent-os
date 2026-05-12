@@ -242,12 +242,98 @@ function explain() {
       train: 'Fit a tiny in-memory route classifier from trace rows as a proof of trainable control.',
       negative_examples: 'Prior Codex writes after question/capability intents become hold-before-write training targets.',
     },
+    primordial_route_lineage: [
+      'compression/control_kernel: reduce messy intent to the smallest control state',
+      'memory/search_memory: recover prior state before widening',
+      'future/candidate_select: compare possible next transitions',
+      'intervention/test_gate: evaluate by observable outcome',
+      'intervention/ops_tape_hold: hold effectful operations before executor admission',
+    ],
     patch_materialization: {
       patch: 'Read proposed file content from stdin and print a unified diff artifact.',
       patch_export: 'Write only the unified diff artifact to disk. It does not modify the target file.',
       apply_boundary: 'Applying a patch is a separate explicit executor action outside this binary.',
     },
     claim_boundary: 'This explains and operates the runtime packet substrate; it is not proof of production autonomy or model-level attention.',
+  };
+}
+
+function lineage() {
+  return {
+    kind: 'agent_os.lineage.v0',
+    direction: 'work backwards from product claim to empirical receipts',
+    primordial_route: {
+      name: 'control.transition.v0',
+      root: 'intent -> tensor_family -> route -> gate -> receipt',
+      families: {
+        compression: 'control_kernel',
+        memory: 'search_memory',
+        future: 'candidate_select',
+        intervention: 'test_gate | ops_tape_hold',
+      },
+    },
+    chain: [
+      {
+        step: 1,
+        claim: 'A public single-binary artifact exists.',
+        evidence: 'https://github.com/j-94/codex-noderepl-agent-os',
+        status: 'direct',
+      },
+      {
+        step: 2,
+        claim: 'The binary emits VL1 packets, typed ASTs, routes, gates, receipts, and training targets.',
+        evidence: './agent-os trace "find the prior tensor routing artifact"',
+        status: 'direct',
+      },
+      {
+        step: 3,
+        claim: 'Effectful intents are held before executor action.',
+        evidence: './agent-os selftest routes commit/update intents to ops_tape_hold with executor_allowed=false',
+        status: 'direct',
+      },
+      {
+        step: 4,
+        claim: 'Patch materialization can be artifact-first instead of target-file writes.',
+        evidence: './agent-os patch-export writes a diff artifact and leaves the target path untouched',
+        status: 'direct',
+      },
+      {
+        step: 5,
+        claim: 'Codex history can be converted into Agent Trace ABI rows.',
+        evidence: './agent-os metrics /Users/jobs/.codex-clean',
+        status: 'direct-local',
+      },
+      {
+        step: 6,
+        claim: 'Prior over-eager writes become negative gate-training examples.',
+        evidence: 'metrics reports prior_violation from observed_write where the route was not ops_tape_hold',
+        status: 'direct-local',
+      },
+      {
+        step: 7,
+        claim: 'Trace rows are trainable.',
+        evidence: './agent-os train /Users/jobs/.codex-clean',
+        status: 'canary',
+      },
+      {
+        step: 8,
+        claim: 'A prior learned runtime tensor beat BM25 and ablation on a local heldout route suite.',
+        evidence: '/Users/jobs/Desktop/bit-vector-tensor-control-policy/runs/frontier-clearance-loop/20260502T-tensor-memory/artifacts/TENSOR_MEMORY_BAKEOFF.json',
+        status: 'prior-receipt',
+      },
+      {
+        step: 9,
+        claim: 'A prior surface-order harness routed a small promoted-first suite correctly.',
+        evidence: '/Users/jobs/Developer/causal-workbench/runs/data_eval/surface-order-20260416T172257Z/utir.json',
+        status: 'prior-receipt',
+      },
+    ],
+    current_boundaries: [
+      'The toy learner is not production-grade.',
+      'Labels are mostly heuristic and local to this Codex history.',
+      'No model weights or attention mechanisms are changed.',
+      'No SWE correctness or production autonomy is proven.',
+    ],
   };
 }
 
@@ -537,6 +623,7 @@ function usage() {
     'Usage:',
     '  ./agent-os version',
     '  ./agent-os explain',
+    '  ./agent-os lineage',
     '  ./agent-os trace "intent text"',
     '  ./agent-os plan "intent text"',
     '  ./agent-os patch "intent text" target-file < new-content',
@@ -632,6 +719,10 @@ function main(argv) {
       console.log(JSON.stringify(explain(), null, 2));
       return;
     }
+    if (command === 'lineage') {
+      console.log(JSON.stringify(lineage(), null, 2));
+      return;
+    }
     if (command === 'trace') {
       console.log(JSON.stringify(trace(rest.join(' ')), null, 2));
       return;
@@ -693,6 +784,7 @@ module.exports = {
   patchArtifact,
   exportPatch,
   explain,
+  lineage,
   selftest,
   ingestCodex,
   metrics,
