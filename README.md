@@ -27,6 +27,7 @@ behavior or agent instructions:
 
 ```text
 routes/session-entry.route.json
+new_project/agent-os/routes/top.route.json
 ```
 
 That route is the canonical session-entry path for this workspace:
@@ -43,6 +44,14 @@ fresh session / control question
 `agent-os` remains the runnable packet/route/gate demo. The repository route
 manifest is the inspectable contract that tells future sessions how to enter
 the repo without re-running a history bootstrap.
+
+Published surfaces:
+
+```text
+new_project/              # workspace/session-entry surface
+new_project/agent-os/     # relation from the project surface to Agent OS
+new_project/agent-os/routes/top.route.json
+```
 
 ## Usage
 

@@ -1,0 +1,32 @@
+{
+  "schema": "agent_os.top_route.v0",
+  "route_id": "new_project.agent_os.top_route.v0",
+  "status": "active",
+  "surfaces": {
+    "workspace_surface": "new_project/",
+    "agent_os_surface": "new_project/agent-os/",
+    "route_subdir": "new_project/agent-os/routes/",
+    "root_route": "routes/session-entry.route.json",
+    "runtime_binary": "agent-os"
+  },
+  "top_route": [
+    "fresh session / control question",
+    "New project session-entry state",
+    "TP(intent, recovered_state?, op?, gate?)",
+    "transition.packet.v0",
+    "answer-card | patch-card | WorkManifest | ControlPacket",
+    "gate: hold effects unless explicitly admitted with rollback, evidence, claim_boundary, and receipt",
+    "render prose/dashboard as packet view"
+  ],
+  "controller": {
+    "kind": "in_memory_transition_proxy",
+    "not_controller": [
+      "repo_scan",
+      "raw_history",
+      "shell",
+      "filesystem",
+      "agent-os executable"
+    ]
+  },
+  "claim_boundary": "This top route makes the New project -> Agent OS relation visible in the GitHub repo. It is not a sealed effect proxy, production autonomy, SWE proof, or model-level learning claim."
+}
