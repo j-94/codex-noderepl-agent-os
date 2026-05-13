@@ -160,10 +160,21 @@ Ask the system to work on itself:
 ```
 
 This does not edit files. It emits an `agent_os.self_plan.v0` object containing
-a `unity.kernel.packet.v0`, writes it to virtual MemFS, plans `npm test`, and
-returns the tape snapshot plus receipt count. Self-recursion becomes a patch
-only after the packet is reviewed, gated, tested, and materialized by an
-admitted backend.
+a `unity.kernel.packet.v0` plus a `codex.capsule.v0`, writes both to virtual
+MemFS, plans `npm test`, and returns the tape snapshot plus receipt count.
+Self-recursion becomes a patch only after the packet is reviewed, gated, tested,
+and materialized by an admitted backend.
+
+The Codex capsule is the compact speech layer:
+
+```text
+say: one sentence Codex can follow
+control_stream: VL1 carrier + transition + gate/hash
+codex_rules: what Codex must do next
+forbidden_defaults: what would erase the control frame
+next_action: hold, test, or admitted materialization route
+claim_boundary: what this run proves and does not prove
+```
 
 Create a v2 packet:
 

@@ -150,6 +150,35 @@ Act: Agent OS tape first
 Materialize: only after rollback + evidence + claim_boundary + receipt
 ```
 
+Self-recursion and Codex speech:
+
+```bash
+./agent-os self "<intent>"
+```
+
+The self command must return both:
+
+```text
+agent_os.self_plan.v0
+codex.capsule.v0
+```
+
+Use `codex.capsule.v0` as the compact bridge from the language to Codex
+behavior:
+
+```text
+say -> one sentence Codex can follow
+control_stream -> VL1 carrier + transition + gate/hash
+codex_rules -> required behavior
+forbidden_defaults -> failure modes to avoid
+next_action -> hold, test, patch-plan, or admitted materialization
+claim_boundary -> what the run proves and does not prove
+```
+
+When a request says "improve the language" or "improve the way it talks with
+Codex", run the self command first, then make only the smallest patch that
+improves the `codex.capsule.v0` contract or its tests.
+
 Codex Cloud instruction:
 
 ```text
