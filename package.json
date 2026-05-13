@@ -11,6 +11,7 @@
     "./repl": "./src/repl.js",
     "./self": "./src/self.js",
     "./surface": "./src/surface.js",
+    "./train": "./src/train.js",
     "./tools": "./src/tools.js"
   },
   "bin": {
@@ -18,7 +19,7 @@
     "agent-os": "./agent-os"
   },
   "scripts": {
-    "test": "node test/core.test.js && node test/reflex.test.js && node test/cybernetic.test.js && node test/language.test.js && node test/self.test.js",
+    "test": "node test/core.test.js && node test/reflex.test.js && node test/cybernetic.test.js && node test/language.test.js && node test/self.test.js && node test/train.test.js",
     "selftest": "node agent-os selftest"
   },
   "license": "UNLICENSED"

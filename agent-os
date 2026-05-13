@@ -4,6 +4,7 @@
 const { init, readMem, run, snapshot, step } = require('./src/core');
 const { selfPlan } = require('./src/self');
 const { gate, memexec, memfs } = require('./src/tools');
+const { trainFromFile, trainTape } = require('./src/train');
 const repl = require('./src/repl');
 
 function print(value) {
@@ -37,6 +38,8 @@ function main(argv) {
       './agent-os step read <path>',
       './agent-os step plan <cmd...>',
       './agent-os self <intent...>',
+      './agent-os learn <intent...>',
+      './agent-os precompute-history <json-or-jsonl-path> [limit]',
       './agent-os repl  # native Node REPL with machine helpers preloaded',
       '',
     ].join('\n'));
@@ -44,6 +47,14 @@ function main(argv) {
   }
   if (command === 'selftest') return print(selftest());
   if (command === 'self') return print(selfPlan(args.join(' ') || 'inspect and improve Agent OS v2'));
+  if (command === 'learn') {
+    return print(trainTape([{ intent: args.join(' ') || 'learn from this turn', outcome: 'held' }]));
+  }
+  if (command === 'precompute-history') {
+    const [path, limit] = args;
+    if (!path) throw new Error('precompute-history requires a JSON or JSONL path');
+    return print(trainFromFile(path, { limit: limit ? Number(limit) : undefined }));
+  }
   if (command === 'repl') return repl.start();
   if (command === 'step') {
     const event = repl.parse(args.join(' '));
@@ -64,4 +75,6 @@ if (require.main === module) {
 module.exports = {
   selfPlan,
   selftest,
+  trainFromFile,
+  trainTape,
 };

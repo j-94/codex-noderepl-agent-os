@@ -129,6 +129,7 @@ turn-0 reflex memory test
 BVT cybernetic tape test
 Unity language test
 self recursion test
+training tape test
 ```
 
 ## Quickstart
@@ -137,6 +138,7 @@ self recursion test
 npm test
 ./agent-os selftest
 ./agent-os self "improve the language without increasing complexity"
+./agent-os learn "Codex held effects and answered from the packet"
 ./agent-os step write note.txt hello
 ./agent-os repl
 ```
@@ -175,6 +177,50 @@ forbidden_defaults: what would erase the control frame
 next_action: hold, test, or admitted materialization route
 claim_boundary: what this run proves and does not prove
 ```
+
+## Realtime Training
+
+The tape can learn continuously without changing model weights:
+
+```bash
+./agent-os learn "Codex held direct writes and used the packet"
+```
+
+This creates an `agent_os.training_run.v0` with:
+
+```text
+training events
+route/gate/speech priors
+virtual MemFS hashes
+receipt count
+```
+
+Precompute previous Codex history from JSON or JSONL rows:
+
+```bash
+./agent-os precompute-history ./history.jsonl 100
+```
+
+Accepted row fields are intentionally loose so history exports can be reduced
+without a bespoke importer:
+
+```json
+{"intent":"recover history before editing","outcome":"test_passed"}
+{"objective":"direct file write drift","outcome":"user_corrected"}
+```
+
+Outcomes update external priors only:
+
+```text
+test_passed/user_accepted -> +1
+held -> +0.25
+user_corrected/test_failed -> -1
+unknown -> 0
+```
+
+Claim boundary: this is realtime controller training on tape. It does not
+fine-tune model weights, prove global Codex improvement, or mechanically enforce
+effects.
 
 Create a v2 packet:
 

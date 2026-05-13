@@ -179,6 +179,29 @@ When a request says "improve the language" or "improve the way it talks with
 Codex", run the self command first, then make only the smallest patch that
 improves the `codex.capsule.v0` contract or its tests.
 
+Realtime tape training:
+
+```bash
+./agent-os learn "<intent or observed behavior>"
+./agent-os precompute-history <json-or-jsonl-path> [limit]
+```
+
+Use this path when the user asks whether Agent OS can train, learn continually,
+store on tape, or precompute prior Codex history. The output is:
+
+```text
+agent_os.training_run.v0
+training events
+route/gate/speech priors
+events_hash / priors_hash
+receipt count
+```
+
+Training updates external tape priors only. It does not fine-tune model weights,
+prove global Codex improvement, or mechanically enforce effects. Use it to
+precompute route, gate, and speech priors from prior Codex-history rows before
+claiming any stronger learning behavior.
+
 Codex Cloud instruction:
 
 ```text
