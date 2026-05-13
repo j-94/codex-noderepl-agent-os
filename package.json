@@ -9,6 +9,7 @@
     "./bridge": "./src/bridge.js",
     "./language": "./src/language.js",
     "./repl": "./src/repl.js",
+    "./self": "./src/self.js",
     "./surface": "./src/surface.js",
     "./tools": "./src/tools.js"
   },
@@ -17,7 +18,7 @@
     "agent-os": "./agent-os"
   },
   "scripts": {
-    "test": "node test/core.test.js && node test/reflex.test.js && node test/cybernetic.test.js && node test/language.test.js",
+    "test": "node test/core.test.js && node test/reflex.test.js && node test/cybernetic.test.js && node test/language.test.js && node test/self.test.js",
     "selftest": "node agent-os selftest"
   },
   "license": "UNLICENSED"

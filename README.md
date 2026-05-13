@@ -128,6 +128,7 @@ core tape selftest
 turn-0 reflex memory test
 BVT cybernetic tape test
 Unity language test
+self recursion test
 ```
 
 ## Quickstart
@@ -135,6 +136,7 @@ Unity language test
 ```bash
 npm test
 ./agent-os selftest
+./agent-os self "improve the language without increasing complexity"
 ./agent-os step write note.txt hello
 ./agent-os repl
 ```
@@ -150,6 +152,18 @@ bridge(machine)
 
 The REPL process carries `machine`/`M` forward until you exit it. This is the
 primary live surface; the CLI parser is only a thin one-shot edge.
+
+Ask the system to work on itself:
+
+```bash
+./agent-os self "add a narrow recursive check"
+```
+
+This does not edit files. It emits an `agent_os.self_plan.v0` object containing
+a `unity.kernel.packet.v0`, writes it to virtual MemFS, plans `npm test`, and
+returns the tape snapshot plus receipt count. Self-recursion becomes a patch
+only after the packet is reviewed, gated, tested, and materialized by an
+admitted backend.
 
 Create a v2 packet:
 

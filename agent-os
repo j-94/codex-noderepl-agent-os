@@ -2,6 +2,7 @@
 'use strict';
 
 const { init, readMem, run, snapshot, step } = require('./src/core');
+const { selfPlan } = require('./src/self');
 const { gate, memexec, memfs } = require('./src/tools');
 const repl = require('./src/repl');
 
@@ -35,12 +36,14 @@ function main(argv) {
       './agent-os step write <path> <bytes>',
       './agent-os step read <path>',
       './agent-os step plan <cmd...>',
+      './agent-os self <intent...>',
       './agent-os repl  # native Node REPL with machine helpers preloaded',
       '',
     ].join('\n'));
     return;
   }
   if (command === 'selftest') return print(selftest());
+  if (command === 'self') return print(selfPlan(args.join(' ') || 'inspect and improve Agent OS v2'));
   if (command === 'repl') return repl.start();
   if (command === 'step') {
     const event = repl.parse(args.join(' '));
@@ -59,5 +62,6 @@ if (require.main === module) {
 }
 
 module.exports = {
+  selfPlan,
   selftest,
 };
