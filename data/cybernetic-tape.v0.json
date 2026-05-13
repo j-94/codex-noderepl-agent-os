@@ -1,0 +1,47 @@
+{
+  "kind": "bvt_cybernetic_tape.v0",
+  "claim_boundary": "Local deterministic cybernetic tape prototype. This is external control memory, not model-weight learning, production autonomy, or mechanical enforcement.",
+  "root_law": "S + delta + C -> S_prime",
+  "bands": ["u", "f1", "f2", "f3", "inf"],
+  "verbs": ["OBSERVE", "CLASSIFY", "GENERATE", "ANNEAL", "GATE", "ACT", "TEST", "STORE", "PROMOTE", "REPLAY"],
+  "selection_pressure": [
+    "block repeated failure",
+    "preserve user momentum",
+    "minimize context bloat",
+    "require rollback",
+    "require receipt-backed evidence",
+    "avoid global claims"
+  ],
+  "events": [
+    {
+      "id": "event:file_write_drift:20260513T152037Z",
+      "S": "Codex drifted toward direct file creation after proceed/control requests.",
+      "delta": "Add file_write_correction reflex and test it.",
+      "C": {
+        "failure_class": "direct_file_write_drift",
+        "selection_pressure": ["block direct writes", "route through UTIR", "preserve rollback"],
+        "rollback": "restore prior reflex/test hashes or remove added card",
+        "evidence": ["user interruption", "failing reflex priority test", "passing guarded UTIR receipt"],
+        "promotion_band": "f2",
+        "claim_boundary": "local canary only"
+      },
+      "S_prime": "file-write complaints route to hold/UTIR instead of direct patching.",
+      "receipt": "runs/turn0-reflex-memory-utir/fix_turn0_reflex_tests/20260513T152037Z/receipt.json"
+    },
+    {
+      "id": "event:agent_completion_gap:20260513T152037Z",
+      "S": "Agent-run requests risk becoming user-managed context loops.",
+      "delta": "Add agent_completion_contract reflex.",
+      "C": {
+        "failure_class": "user_managed_context_loop",
+        "selection_pressure": ["complete or block with evidence", "return end insight", "avoid chat-only completion"],
+        "rollback": "remove agent_completion_contract card and test",
+        "evidence": ["previous unmatched prompt", "passing guarded UTIR receipt"],
+        "promotion_band": "f2",
+        "claim_boundary": "local canary only"
+      },
+      "S_prime": "agent-run requests route to environment completion contract and end insight reducer.",
+      "receipt": "runs/turn0-reflex-memory-utir/fix_turn0_reflex_tests/20260513T152037Z/receipt.json"
+    }
+  ]
+}

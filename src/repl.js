@@ -1,8 +1,13 @@
 'use strict';
 
-const readline = require('readline');
-const { init, readMem, step } = require('./core');
-const { gate, memexec, memfs } = require('./tools');
+const nodeRepl = require('repl');
+const util = require('util');
+const bridgeApi = require('./bridge');
+const core = require('./core');
+const surfaceApi = require('./surface');
+const tools = require('./tools');
+const { init, readMem, snapshot, step } = core;
+const { gate, memexec, memfs } = tools;
 
 function parse(line) {
   const [command, key, ...rest] = line.trim().split(/\s+/);
@@ -20,24 +25,56 @@ function view(state) {
   return {
     head: state.head,
     halted: state.halted,
-    mem: state.mem.map(([key, blob]) => [key, blob.hash]),
-    effects: state.effects.length,
+    mem: state.mem.map(([key, blob]) => [key, { value: blob.value, hash: blob.hash }]),
+    effects: state.effects.map((effect) => ({
+      kind: effect.kind.description,
+      data: effect.data,
+    })),
     receipts: state.receipts.length,
   };
 }
 
 function start(input = process.stdin, output = process.stdout) {
   let machine = init();
-  const rl = readline.createInterface({ input, output, prompt: 'tape> ' });
-  rl.prompt();
-  rl.on('line', (line) => {
-    const event = parse(line);
-    machine = step(machine, event);
-    output.write(`${JSON.stringify(view(machine))}\n`);
-    if (machine.halted) rl.close();
-    else rl.prompt();
+  const server = nodeRepl.start({
+    input,
+    output,
+    prompt: 'node-tape> ',
+    useGlobal: false,
+    writer: (value) => util.inspect(value, { colors: false, compact: false, depth: null }),
   });
-  return rl;
+
+  function apply(event) {
+    machine = step(machine, event);
+    server.context.machine = machine;
+    server.context.M = machine;
+    return view(machine);
+  }
+
+  Object.assign(server.context, {
+    ...core,
+    ...tools,
+    ...bridgeApi,
+    ...surfaceApi,
+    apply,
+    bridgeApi,
+    core,
+    read: (key) => readMem(machine, key),
+    reset: () => {
+      machine = init();
+      server.context.machine = machine;
+      server.context.M = machine;
+      return view(machine);
+    },
+    snapshot: () => snapshot(machine),
+    tools,
+    view: () => view(machine),
+  });
+
+  server.context.machine = machine;
+  server.context.M = machine;
+  output.write('loaded: machine/M, apply(event), memfs, memexec, memgit, memnet, gate, bridge, surface\n');
+  return server;
 }
 
 module.exports = {
@@ -46,4 +83,3 @@ module.exports = {
   start,
   view,
 };
-

@@ -35,7 +35,7 @@ function main(argv) {
       './agent-os step write <path> <bytes>',
       './agent-os step read <path>',
       './agent-os step plan <cmd...>',
-      './agent-os repl',
+      './agent-os repl  # native Node REPL with machine helpers preloaded',
       '',
     ].join('\n'));
     return;

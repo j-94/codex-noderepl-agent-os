@@ -1,0 +1,48 @@
+{
+  "kind": "turn0_reflex_memory.v0",
+  "claim_boundary": "Local deterministic reflex trial. This is not model-weight learning, production reliability, or mechanical enforcement.",
+  "cards": [
+    {
+      "id": "control_work",
+      "triggers": ["control", "failure mode", "codex", "behavior", "realign"],
+      "operators": ["primitive_gate", "intent_to_packet", "gate_before_effect", "receipt_first_claims"],
+      "blocks": ["generic_reset", "doctrine_replay", "direct_file_write_first"],
+      "route": "Primitive Atlas Gate -> Agent OS packet -> UTIR if effectful"
+    },
+    {
+      "id": "prior_work",
+      "triggers": ["our work", "prior work", "history", "look at", "memory"],
+      "operators": ["compress_before_expand", "route_by_purpose", "trace_packet"],
+      "blocks": ["raw_history_first", "generic_answer"],
+      "route": "promoted surfaces -> exact handles -> raw history last"
+    },
+    {
+      "id": "proceed_effect",
+      "triggers": ["proceed", "do it", "continue", "build it"],
+      "operators": ["intent_to_packet", "UTIR_materialization", "rollback_drill", "gate_before_effect"],
+      "blocks": ["apply_patch_first", "new_files_as_controller"],
+      "route": "Agent OS packet -> UTIR op tape -> guarded executor -> receipt"
+    },
+    {
+      "id": "claim_accuracy",
+      "triggers": ["prove", "accuracy", "measure", "real", "stop failure"],
+      "operators": ["receipt_replay", "claim_boundary", "held_out_eval"],
+      "blocks": ["overclaim_without_receipt", "model_weight_claim"],
+      "route": "scorecard -> receipt -> bounded claim"
+    },
+    {
+      "id": "file_write_correction",
+      "triggers": ["why are you writing files", "stop writing files", "dont write files", "don't write files", "direct file", "use utir"],
+      "operators": ["interrupt", "hold_effects", "UTIR_materialization", "gate_before_effect", "rollback_drill"],
+      "blocks": ["apply_patch_first", "source_doc_sprawl", "new_files_as_controller"],
+      "route": "interrupt -> Agent OS correction packet -> virtual/UTIR only -> guarded executor or hold"
+    },
+    {
+      "id": "agent_completion_contract",
+      "triggers": ["run an agent", "complete the task", "without managing", "end insight", "environment", "agent run"],
+      "operators": ["environment_completion_contract", "end_insight_reducer", "receipt_replay", "state_transition"],
+      "blocks": ["user_managed_context_loop", "chat_only_completion", "missing_evidence"],
+      "route": "intent -> environment interaction contract -> done|blocked with evidence -> end insight"
+    }
+  ]
+}

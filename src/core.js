@@ -3,23 +3,23 @@
 const crypto = require('crypto');
 
 const K = Object.freeze({
-  BOOT: Symbol(),
-  TICK: Symbol(),
-  READ: Symbol(),
-  WRITE: Symbol(),
-  PLAN: Symbol(),
-  EFFECT: Symbol(),
-  ADMIT: Symbol(),
-  HALT: Symbol(),
+  BOOT: Symbol('BOOT'),
+  TICK: Symbol('TICK'),
+  READ: Symbol('READ'),
+  WRITE: Symbol('WRITE'),
+  PLAN: Symbol('PLAN'),
+  EFFECT: Symbol('EFFECT'),
+  ADMIT: Symbol('ADMIT'),
+  HALT: Symbol('HALT'),
 });
 
 const O = Object.freeze({
-  OBSERVE: Symbol(),
-  SELECT: Symbol(),
-  TRANSFORM: Symbol(),
-  GATE: Symbol(),
-  COMMIT: Symbol(),
-  RECEIPT: Symbol(),
+  OBSERVE: Symbol('OBSERVE'),
+  SELECT: Symbol('SELECT'),
+  TRANSFORM: Symbol('TRANSFORM'),
+  GATE: Symbol('GATE'),
+  COMMIT: Symbol('COMMIT'),
+  RECEIPT: Symbol('RECEIPT'),
 });
 
 const ALPHABET = Object.freeze([...Object.values(K), ...Object.values(O)]);
