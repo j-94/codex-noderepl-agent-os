@@ -4,8 +4,10 @@ const nodeRepl = require('repl');
 const util = require('util');
 const bridgeApi = require('./bridge');
 const core = require('./core');
+const effectProxyApi = require('./effect_proxy');
 const surfaceApi = require('./surface');
 const tools = require('./tools');
+const virtualRouteApi = require('./virtual_route');
 const { init, readMem, snapshot, step } = core;
 const { gate, memexec, memfs } = tools;
 
@@ -55,7 +57,9 @@ function start(input = process.stdin, output = process.stdout) {
     ...core,
     ...tools,
     ...bridgeApi,
+    ...effectProxyApi,
     ...surfaceApi,
+    ...virtualRouteApi,
     apply,
     bridgeApi,
     core,
