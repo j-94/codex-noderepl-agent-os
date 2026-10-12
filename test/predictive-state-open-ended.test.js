@@ -1,0 +1,12 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {run}=require('../experiments/predictive-state/open-ended');
+const a=run({seed:13,steps:90}),b=run({seed:13,steps:90});
+assert.deepEqual(a,b,'seeded stream must replay exactly');
+assert.equal(a.head,90);
+assert.equal(a.receiptCount,90);
+assert.equal(a.snapshots.at(-1).step,90);
+assert.ok(a.snapshots.every(s=>s.classes<=s.observedStates));
+assert.notDeepEqual(a.snapshots,run({seed:14,steps:90}).snapshots);
+assert.throws(()=>run({steps:0}),RangeError);
+console.log('procedural stream on native tape: ok');
