@@ -1,0 +1,25 @@
+name: Node predictive-state observer
+on:
+  push:
+    branches: [experiment/predictive-state-shadow]
+    paths:
+      - 'src/predictive-state.js'
+      - 'test/predictive-state.test.js'
+      - 'src/core.js'
+      - 'src/tools.js'
+      - '.github/workflows/predictive-state-node.yml'
+  workflow_dispatch:
+jobs:
+  observer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing Agent OS regression tests
+        run: npm test
+      - name: Predictive-state observer tests
+        run: node test/predictive-state.test.js
