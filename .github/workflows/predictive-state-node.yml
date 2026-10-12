@@ -30,5 +30,9 @@ jobs:
         run: node test/predictive-state-evaluation.test.js
       - name: Held-out metrics and shuffled control
         run: node experiments/predictive-state/evaluate.js
+      - name: Procedural stream tests
+        run: node test/predictive-state-open-ended.test.js
+      - name: Procedural nonstationary run
+        run: node experiments/predictive-state/open-ended.js
       - name: Demo boot
         run: node experiments/predictive-state/bootstrap.js
