@@ -26,5 +26,9 @@ jobs:
         run: node test/predictive-state.test.js
       - name: Bootstrap replay and receipts
         run: node test/predictive-state-bootstrap.test.js
+      - name: Evaluation regression tests
+        run: node test/predictive-state-evaluation.test.js
+      - name: Held-out metrics and shuffled control
+        run: node experiments/predictive-state/evaluate.js
       - name: Demo boot
         run: node experiments/predictive-state/bootstrap.js
