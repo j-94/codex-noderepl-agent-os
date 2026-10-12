@@ -4,7 +4,8 @@ on:
     branches: [experiment/predictive-state-shadow]
     paths:
       - 'src/predictive-state.js'
-      - 'test/predictive-state.test.js'
+      - 'test/predictive-state*.test.js'
+      - 'experiments/predictive-state/**'
       - 'src/core.js'
       - 'src/tools.js'
       - '.github/workflows/predictive-state-node.yml'
@@ -23,3 +24,7 @@ jobs:
         run: npm test
       - name: Predictive-state observer tests
         run: node test/predictive-state.test.js
+      - name: Bootstrap replay and receipts
+        run: node test/predictive-state-bootstrap.test.js
+      - name: Demo boot
+        run: node experiments/predictive-state/bootstrap.js
