@@ -34,5 +34,7 @@ jobs:
         run: node test/predictive-state-open-ended.test.js
       - name: Procedural nonstationary run
         run: node experiments/predictive-state/open-ended.js
+      - name: Online action adaptation experiment
+        run: node experiments/predictive-state/online-actions.js
       - name: Demo boot
         run: node experiments/predictive-state/bootstrap.js
