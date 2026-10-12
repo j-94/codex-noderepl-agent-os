@@ -1,0 +1,21 @@
+name: Predictive-state baseline
+on:
+  push:
+    branches:
+      - experiment/predictive-state-shadow
+    paths:
+      - 'experiments/predictive-state/**'
+      - '.github/workflows/predictive-state-baseline.yml'
+  workflow_dispatch:
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact bisimulation baseline
+        run: python experiments/predictive-state/predictive_state_shadow.py
