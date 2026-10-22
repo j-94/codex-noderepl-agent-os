@@ -1,0 +1,35 @@
+{
+  "schema": "mvl-compatibility-v1",
+  "description": "Synthetic, prompt-held-out compatibility tasks. Not cross-domain or composition evidence.",
+  "source": [
+    {"ref":"source/1","runtime":"engine-1","generation":1,"format":"record","tool":"cedar","exit_code":0,"accepted":true},
+    {"ref":"source/2","runtime":"engine-2","generation":1,"format":"record","tool":"birch","exit_code":0,"accepted":true}
+  ],
+  "counterexample": [
+    {"ref":"change/1","runtime":"engine-1","generation":2,"format":"record","tool":"cedar","exit_code":3,"accepted":false,"error":"incompatible executable"},
+    {"ref":"change/2","runtime":"engine-1","generation":2,"format":"record","tool":"birch","exit_code":0,"accepted":true}
+  ],
+  "distractions": [
+    {"ref":"noise/1","topic":"calendar","text":"A workshop moved from Tuesday to Thursday. No executable or task environment changed."},
+    {"ref":"noise/2","topic":"inventory","text":"There are seven spare notebooks. No executable or task environment changed."}
+  ],
+  "environments": {
+    "engine-1:1": {"compatible_tool":"cedar"},
+    "engine-2:1": {"compatible_tool":"birch"},
+    "engine-1:2": {"compatible_tool":"birch"}
+  },
+  "cases": [
+    {"id":"t01","family":"transfer","runtime":"engine-1","generation":1,"payload":"alpha","expected":"ALPHA"},
+    {"id":"t02","family":"transfer","runtime":"engine-1","generation":1,"payload":"bravo","expected":"BRAVO"},
+    {"id":"t03","family":"transfer","runtime":"engine-1","generation":1,"payload":"charlie","expected":"CHARLIE"},
+    {"id":"t04","family":"exception","runtime":"engine-2","generation":1,"payload":"delta","expected":"DELTA"},
+    {"id":"t05","family":"exception","runtime":"engine-2","generation":1,"payload":"echo","expected":"ECHO"},
+    {"id":"t06","family":"exception","runtime":"engine-2","generation":1,"payload":"foxtrot","expected":"FOXTROT"},
+    {"id":"t07","family":"changed","runtime":"engine-1","generation":2,"payload":"golf","expected":"GOLF"},
+    {"id":"t08","family":"changed","runtime":"engine-1","generation":2,"payload":"hotel","expected":"HOTEL"},
+    {"id":"t09","family":"changed","runtime":"engine-1","generation":2,"payload":"india","expected":"INDIA"},
+    {"id":"t10","family":"return_to_original","runtime":"engine-1","generation":1,"payload":"juliet","expected":"JULIET"},
+    {"id":"t11","family":"return_to_original","runtime":"engine-1","generation":1,"payload":"kilo","expected":"KILO"},
+    {"id":"t12","family":"return_to_original","runtime":"engine-1","generation":1,"payload":"lima","expected":"LIMA"}
+  ]
+}
