@@ -1,0 +1,23 @@
+{
+  "evidence_type": "scripted-harness-validation; NOT live LLM results",
+  "core_commit": "6d6a1332917c35b42deb193dd6c3983386416d67",
+  "core_blob": "1eeb1cf5c97b2a38f1dbc0a803c0ef503924aed4",
+  "fixture_sha256": "3a2cf55cd1565b67a64b03a61e53a54a023c8b6513aec6b6934217f5763e01b5",
+  "runner_sha256": "9f5df68f99dc3b94f3b524dd4ad02f2596952aca28dd5f33c63c788f1f928d36",
+  "checker_sha256": "41836248903904f0089b91c16df36bd75032a397b8031c0bbe4384cf188e9b1c",
+  "raw_run_sha256": "5e964c420ee6de4fb00264b868f46599147028e89bc9e8d4bec9051bee877fd1",
+  "node_version": "v24.19.0",
+  "tiktoken_version": "0.14.0",
+  "encoding": "o200k_base",
+  "state_budget_tokens": 128,
+  "largest_observed_state_tokens": 28,
+  "scripted_episodes": 96,
+  "scripted_adapter_calls": 137,
+  "unauthorised_attempts": 0,
+  "protocol_tests_passed": 10,
+  "existing_core_tests_passed": true,
+  "live_model_calls": 0,
+  "live_blocker": "No Codex executable or OPENAI_API_KEY in this execution environment.",
+  "reproduce": "npm run mvl:smoke -- --encoding o200k_base --out /tmp/mvl-token-smoke",
+  "raw_run_note": "Generated run.json is not committed. This compact receipt records the local validation; reruns have different timestamps and hashes."
+}

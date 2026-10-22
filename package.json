@@ -17,7 +17,10 @@
   },
   "scripts": {
     "test": "node test/core.test.js",
-    "selftest": "node agent-os selftest"
+    "selftest": "node agent-os selftest",
+    "test:mvl": "node --test experiments/mvl/test.js",
+    "mvl:smoke": "node experiments/mvl/test.js --smoke",
+    "mvl": "node experiments/mvl/runner.js"
   },
   "license": "UNLICENSED"
 }

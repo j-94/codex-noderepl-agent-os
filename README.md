@@ -10,6 +10,15 @@ and network are capability surfaces outside the core.
 event -> step(machine, event) -> machine'
 ```
 
+## Learning experiment
+
+The [minimum viable learning experiment](experiments/mvl/README.md) compares
+no memory, ordinary notes, structured state and full history on disposable
+compatibility tasks. It imports the fixed core directly and records paired
+original/revised-state decisions. Run `npm run test:mvl` for protocol tests or
+`npm run mvl:smoke` for a clearly labelled scripted check. Live model results
+are not included; the experiment README documents the live command and limits.
+
 ## Why The Layers Exist
 
 | Layer | Why it exists | Metric |
