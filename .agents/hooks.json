@@ -1,0 +1,17 @@
+{
+  "agent-os-rme-harness": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/opt/homebrew/bin/node \"/Users/jobs/Documents/New project/src/rme_hook.js\" PreToolUse",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
