@@ -10,6 +10,8 @@ const { BITS, evalActLaw, maskToString } = require('./bit_tape');
 const { nativeContext, digest, DEFAULT_STATE, PROJECT_ROOT } = require('./rme_native');
 const { readHandover } = require('./rme_handover');
 const { evalContractGate } = require('./contract_gate');
+const { evalDelimiterGuard } = require('./ast_delimiter_guard');
+const { evalProposerGate } = require('./proposer_gate');
 
 const ALLOWED_ROOTS = [PROJECT_ROOT, '/Users/jobs/Documents/Codex/2026-10-19/what-have-we-been-working-on'];
 const EVENTS = new Set(['SessionStart', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'Stop']);
@@ -664,7 +666,8 @@ function handleAgyHook(eventName, input = {}, {
     } else if (toolName === 'write_file' && input.toolCall?.args?.Overwrite && !isArtifactPath && fs.existsSync(targetPath)) {
       try {
         const lineCount = fs.readFileSync(targetPath, 'utf8').split('\n').length;
-        if (lineCount > 60) {
+        const guard = evalDelimiterGuard({ filepath: targetPath, lineCount, isOverwrite: true, isArtifact: isArtifactPath });
+        if (guard.decision === 'hold') {
           outcome = 'tool_held_by_ast_delimiter_rule';
           output = {
             decision: 'deny',
@@ -685,7 +688,8 @@ function handleAgyHook(eventName, input = {}, {
       if (resolved && !resolved.startsWith(artifactDir || '/tmp') && fs.existsSync(resolved)) {
         try {
           const lineCount = fs.readFileSync(resolved, 'utf8').split('\n').length;
-          if (lineCount > 60) {
+          const guard = evalDelimiterGuard({ filepath: resolved, lineCount, isOverwrite: true, isArtifact: Boolean(artifactDir && resolved.startsWith(artifactDir)) });
+          if (guard.decision === 'hold') {
             outcome = 'tool_held_by_ast_delimiter_rule';
             output = {
               decision: 'deny',
@@ -699,6 +703,23 @@ function handleAgyHook(eventName, input = {}, {
           outcome = 'tool_admitted';
           output = { decision: 'allow' };
         }
+      } else {
+        outcome = 'tool_admitted';
+        output = { decision: 'allow' };
+      }
+    } else if (toolName === 'run_command' && /(?:^|[\s/])pi(?:\.exe)?\s+/.test(commandLine)) {
+      const thinkingMatch = commandLine.match(/--thinking\s+([a-zA-Z0-9_-]+)/);
+      const requestedThinking = thinkingMatch ? thinkingMatch[1].toLowerCase() : 'high';
+      const hasAstBounds = /--ast-bounds|\[AST BOUNDS\]/i.test(commandLine) || Boolean(input.hasAstBounds);
+      const hasMemory = /--memory|\[MEMORY\]/i.test(commandLine) || Boolean(input.hasMemory);
+
+      const proposerDecision = evalProposerGate({ hasAstBounds, hasMemory, requestedThinking });
+      if (proposerDecision.decision === 'hold') {
+        outcome = 'proposer_held_by_proposer_gate';
+        output = {
+          decision: 'deny',
+          reason: 'Agent OS Harness [HOLD]: Proposer invocation violates Invariant X_7 (Clamped Proposer Gate): ' + proposerDecision.reason + '. Use --thinking low or supply bounded AST context.',
+        };
       } else {
         outcome = 'tool_admitted';
         output = { decision: 'allow' };
@@ -829,4 +850,4 @@ if (require.main === module) main().catch(() => {
   process.stdout.write(JSON.stringify(failClosed) + '\n');
   process.exitCode = 1;
 });
-module.exports = { ALLOWED_ROOTS, admitStance, admitWithToken, aov1Canonical, handleAgyHook, handleHook, holdStance, main, parseAdmitToken, protectedPathReason, protectedShellReason, readStanceState, verifyAdmitToken, writeStanceState };
+module.exports = { ALLOWED_ROOTS, evalDelimiterGuard, evalProposerGate, admitStance, admitWithToken, aov1Canonical, handleAgyHook, handleHook, holdStance, main, parseAdmitToken, protectedPathReason, protectedShellReason, readStanceState, verifyAdmitToken, writeStanceState };

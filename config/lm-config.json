@@ -1,0 +1,37 @@
+{
+  "default_profile": "quad_stack",
+  "profiles": {
+    "quad_stack": {
+      "provider": "xai",
+      "model": "grok-4.7",
+      "thinking": "low",
+      "timeout_s": 30,
+      "temperature": 0.0,
+      "max_tokens": 4096,
+      "ast_slicing": true,
+      "turn0_memory": true,
+      "gates": [
+        "clamped_proposer_gate",
+        "ast_delimiter_guard",
+        "deterministic_promotion_gate"
+      ],
+      "description": "Quad-substrate factorial bake-off champion: 3.78x latency speedup, 66% total token reduction, 87.5% reasoning reduction, 100% deterministic pass rate."
+    },
+    "fast": {
+      "provider": "xai",
+      "model": "grok-4.7",
+      "thinking": "low",
+      "timeout_s": 20,
+      "temperature": 0.2,
+      "description": "Fast generation for simple queries and boilerplate"
+    },
+    "reasoning": {
+      "provider": "xai",
+      "model": "grok-4.7",
+      "thinking": "high",
+      "timeout_s": 120,
+      "temperature": 0.0,
+      "description": "Deep exploratory analysis (requires explicit bounded AST scope)"
+    }
+  }
+}
