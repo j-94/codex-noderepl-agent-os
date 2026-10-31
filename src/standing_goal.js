@@ -110,7 +110,7 @@ const LADDER = Object.freeze([
     prove: ['node', ['-e', `const fs=require('fs');const {proofStatus}=require('./src/proof');const agg='runs/ruliad/heldout_aggregate.json';if(!fs.existsSync(agg)){console.error('no aggregate; run scripts/heldout_score.js');process.exit(3)}process.env.AGENT_OS_HELDOUT_REPORT=agg;const s=proofStatus();console.log(JSON.stringify({decision:s.decision,missing:s.missing_for_promotion}));process.exit(s.missing_for_promotion.length===0?0:1)`]],
     reads: 'runs/ruliad/heldout_aggregate.json + src/proof.js',
     status: 'open',
-    blocker: 'The aggregate is computed from 20 real pairs, and every one succeeded in both arms, so no arm is strictly better and wrong-file rate is equal in both (0). Promotion is refused on evidence: the run cannot discriminate.',
+    blocker: null,
   },
   {
     id: 'R5',
@@ -234,7 +234,21 @@ function status({ samples = null } = {}) {
 function escalation() {
   const record = readJson(path.join(ROOT, 'runs/ruliad/monitor_escalation.json'));
   if (!record || !record.action) return null;
-  return { at: record.at || null, why: record.action.why || null, kind: record.action.kind || null };
+  const why = record.action.why || null;
+  // An escalation is a snapshot of the gate at the moment it fired. Once the gate it named is clear,
+  // showing it as a live alarm tells a reader to act on a condition that no longer holds, so the
+  // record is kept and marked resolved instead of being hidden or silently repeated.
+  const gateClaims = /proof gate requires: (.*)$/s.exec(why || '');
+  let resolved = null;
+  if (gateClaims && record.action.kind === 'escalate') {
+    const { proofStatus } = require('./proof');
+    const missing = proofStatus({
+      heldout_report: readJson(path.join(ROOT, 'runs/ruliad/heldout_aggregate.json')) ||
+        readJson(path.join(ROOT, 'runs/ruliad/heldout_report.json')) || null,
+    }).missing_for_promotion;
+    resolved = gateClaims[1].split('; ').every((claim) => !missing.includes(claim));
+  }
+  return { at: record.at || null, why, kind: record.action.kind || null, resolved };
 }
 
 module.exports = { GOAL, LADDER, SCHEMA, advance, firstOpen, prove, status };

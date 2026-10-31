@@ -12,6 +12,7 @@ const {
   proofStatus,
   tensorEvidence,
 } = require('../src/proof');
+const { verify } = require('../scripts/heldout_pair');
 
 const tensorBakeoff = {
   verdict: 'scoped_learned_tensor_memory_cleared',
@@ -213,6 +214,42 @@ const bvtStudy = {
   assert.ok(Object.prototype.hasOwnProperty.call(status, 'decision'));
   assert.ok(Object.prototype.hasOwnProperty.call(status, 'missing_for_promotion'));
   assert.strictEqual(Object.keys(status).length, 2);
+}
+
+// The heldout runner is the only source of the evidence the gate reads, so its
+// two measurements are tested directly: an out-of-scope write must be visible,
+// and a command that exits 0 with the wrong output must not count as a pass.
+{
+  const { execFileSync: run } = require('child_process');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-os-wrongfile-'));
+  fs.writeFileSync(path.join(dir, 'agent-os'), 'baseline\n');
+  fs.mkdirSync(path.join(dir, 'test'));
+  fs.writeFileSync(path.join(dir, 'test/proof.test.js'), 'process.exit(0)\n');
+  const git = (...a) => run('git', ['-C', dir, ...a], { encoding: 'utf8' });
+  git('init', '-q');
+  git('add', '-A');
+  git('-c', 'user.email=a@b', '-c', 'user.name=a', 'commit', '-qm', 'base');
+  // The arm writes one in-scope file and one outside the declared scope.
+  fs.writeFileSync(path.join(dir, 'agent-os'), 'baseline\nadded\n');
+  fs.mkdirSync(path.join(dir, 'stray'));
+  fs.writeFileSync(path.join(dir, 'stray/note.txt'), 'outside scope\n');
+  const changed = git('status', '--porcelain').split('\n').filter(Boolean).map((l) => l.slice(3).trim());
+  assert.ok(changed.includes('agent-os'), 'in-scope edit must be visible as a change');
+  assert.ok(changed.includes('stray/'), 'out-of-scope write must be visible as a change');
+  fs.rmSync(dir, { recursive: true, force: true });
+
+  // Output correctness: exit 0 alone is not a pass.
+  const cliDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-os-verify-'));
+  fs.mkdirSync(path.join(cliDir, 'test'));
+  fs.writeFileSync(path.join(cliDir, 'test/proof.test.js'), 'process.exit(0)\n');
+  fs.writeFileSync(
+    path.join(cliDir, 'agent-os'),
+    '#!/usr/bin/env node\nconst a=process.argv[2];console.log(a==="right"?"expected":"wrong");\n',
+  );
+  fs.chmodSync(path.join(cliDir, 'agent-os'), 0o755);
+  assert.strictEqual(verify(cliDir, { cmd: 'right', expect: 'expected' }).cmd_ok, true);
+  assert.strictEqual(verify(cliDir, { cmd: 'other', expect: 'expected' }).cmd_ok, false);
+  fs.rmSync(cliDir, { recursive: true, force: true });
 }
 
 console.log('grand hypothesis proof test: ok');

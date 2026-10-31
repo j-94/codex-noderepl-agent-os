@@ -177,6 +177,13 @@ function heldoutEvidence(payload) {
     if (gateFailures.length === 0 && !hasReceipts) {
       gateFailures.push('heldout aggregate scorer must return promote_canary');
     }
+    // Every metric gate can pass and still not promote: the scorer requires the governed arm to win
+    // strictly more pairs, and a run where both arms win the same ones cannot show that. Reporting an
+    // empty reason for a hold is the same defect as inventing a comparison - the caller cannot tell
+    // "nothing is missing" from "promotion was refused for a reason nobody stated".
+    if (gateFailures.length === 0 && !promotionReady) {
+      gateFailures.push('heldout scorer did not promote: the governed arm must win strictly more pairs than direct');
+    }
   }
   return Object.freeze({
     kind: 'proof_lane.heldout_pairs.v0',
