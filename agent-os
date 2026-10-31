@@ -2,7 +2,17 @@
 'use strict';
 
 const { init, readMem, run, snapshot, step } = require('./src/core');
+const {
+  createAdmission,
+  readAdmissionFile,
+  runCommandWithAdmission,
+  writeFileWithAdmission,
+} = require('./src/effect_proxy');
+const { selfPlan } = require('./src/self');
+const { backlogReport } = require('./src/backlog');
 const { gate, memexec, memfs } = require('./src/tools');
+const { trainFromFile, trainTape } = require('./src/train');
+const { DEFAULT_PACKET, renderVirtualRoute, startVirtualRouteServer } = require('./src/virtual_route');
 const repl = require('./src/repl');
 
 function print(value) {
@@ -35,12 +45,90 @@ function main(argv) {
       './agent-os step write <path> <bytes>',
       './agent-os step read <path>',
       './agent-os step plan <cmd...>',
-      './agent-os repl',
+      './agent-os self <intent...>',
+      './agent-os learn <intent...>',
+      './agent-os precompute-history <json-or-jsonl-path> [limit]',
+      './agent-os backlog [artifact-path]',
+      './agent-os render-virtual-route',
+      './agent-os site-dev [port]',
+      './agent-os admit <json>',
+      './agent-os write-file --admission <token.json> <path> <bytes>',
+      './agent-os run-command --admission <token.json> -- <cmd...>',
+      './agent-os repl  # native Node REPL with machine helpers preloaded',
       '',
     ].join('\n'));
     return;
   }
   if (command === 'selftest') return print(selftest());
+  if (command === 'self') return print(selfPlan(args.join(' ') || 'inspect and improve Agent OS v2'));
+  if (command === 'learn') {
+    return print(trainTape([{ intent: args.join(' ') || 'learn from this turn', outcome: 'held' }]));
+  }
+  if (command === 'precompute-history') {
+    const [path, limit] = args;
+    if (!path) throw new Error('precompute-history requires a JSON or JSONL path');
+    return print(trainFromFile(path, { limit: limit ? Number(limit) : undefined }));
+  }
+  if (command === 'backlog') {
+    return print(
+      backlogReport({
+        artifactPath: args[0],
+        statuses: {
+          '/': 200,
+          '/blog.html': 200,
+          '/factory.html': 200,
+          '/dx.html': 200,
+        },
+      }),
+    );
+  }
+  if (command === 'render-virtual-route') {
+    const rendered = renderVirtualRoute(DEFAULT_PACKET);
+    return print({
+      kind: 'virtual_route_render.v0',
+      html_bytes: Buffer.byteLength(rendered.html),
+      receipt: rendered.receipt,
+    });
+  }
+  if (command === 'site-dev') {
+    const port = Number(args[0] || process.env.PORT || 4321);
+    const host = args[1] || process.env.HOST || '127.0.0.1';
+    const server = startVirtualRouteServer({ port, host });
+    process.stdout.write(
+      JSON.stringify(
+        {
+          kind: 'virtual_route_server.v0',
+          url: server.url,
+          receipt_url: server.receipt_url,
+          receipt: server.receipt,
+        },
+        null,
+        2,
+      ) + '\n',
+    );
+    return;
+  }
+  if (command === 'admit') return print(createAdmission(JSON.parse(args.join(' '))));
+  if (command === 'write-file') {
+    const flag = args[0];
+    const admissionPath = args[1];
+    const targetPath = args[2];
+    const bytes = args.slice(3).join(' ');
+    if (flag !== '--admission' || !admissionPath || !targetPath) {
+      throw new Error('write-file requires --admission <token.json> <path> <bytes>');
+    }
+    return print(writeFileWithAdmission(readAdmissionFile(admissionPath), targetPath, bytes));
+  }
+  if (command === 'run-command') {
+    const flag = args[0];
+    const admissionPath = args[1];
+    const sep = args[2];
+    const cmd = args.slice(3);
+    if (flag !== '--admission' || !admissionPath || sep !== '--' || cmd.length === 0) {
+      throw new Error('run-command requires --admission <token.json> -- <cmd...>');
+    }
+    return print(runCommandWithAdmission(readAdmissionFile(admissionPath), cmd));
+  }
   if (command === 'repl') return repl.start();
   if (command === 'step') {
     const event = repl.parse(args.join(' '));
@@ -59,5 +147,14 @@ if (require.main === module) {
 }
 
 module.exports = {
+  selfPlan,
   selftest,
+  backlogReport,
+  createAdmission,
+  trainFromFile,
+  trainTape,
+  renderVirtualRoute,
+  runCommandWithAdmission,
+  startVirtualRouteServer,
+  writeFileWithAdmission,
 };

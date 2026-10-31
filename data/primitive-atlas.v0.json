@@ -1,0 +1,142 @@
+{
+  "kind": "primitive_atlas.v0",
+  "status": "local_working_atlas",
+  "claim_boundary": "Compact synthesis of local cognitive/control work. Not production proof, not universal ontology, not SWE-bench evidence, and not model-weight learning.",
+  "core_loop": [
+    "distinguish",
+    "allocate",
+    "packetize",
+    "route",
+    "gate",
+    "act_or_hold",
+    "receipt",
+    "promote_if_repeated"
+  ],
+  "cognitive_roots": [
+    {
+      "id": "distinction_creates_pattern",
+      "definition": "A boundary creates usable structure.",
+      "derives": ["packets", "lanes", "gates", "types", "claim_boundaries", "route_choices"],
+      "validation": {
+        "passed_tests": 5,
+        "total_tests": 5,
+        "source": "/Users/jobs/Desktop/Desktop(archive)/github/Donkeyv1-extracted/COGNITIVE_PRIMITIVE_VALIDATION_REPORT.md"
+      }
+    },
+    {
+      "id": "resource_constrained_allocation",
+      "definition": "Scarcity forces selection.",
+      "derives": ["attention_routing", "token_budgeting", "future_sampling", "patch_selection", "bounded_work"],
+      "validation": {
+        "passed_tests": 5,
+        "total_tests": 5,
+        "source": "/Users/jobs/Desktop/Desktop(archive)/github/Donkeyv1-extracted/COGNITIVE_PRIMITIVE_VALIDATION_REPORT.md"
+      }
+    }
+  ],
+  "primitives": [
+    {
+      "id": "state_transition",
+      "layer": "control",
+      "shape": "S + delta + C -> S'",
+      "use": "Make every change explicit and checkable."
+    },
+    {
+      "id": "route_by_purpose",
+      "layer": "control",
+      "shape": "intent -> lane",
+      "use": "Select the smallest useful surface before expanding context."
+    },
+    {
+      "id": "gate_before_effect",
+      "layer": "control",
+      "shape": "candidate -> admit|hold|reject",
+      "use": "Prevent prose from becoming mutation."
+    },
+    {
+      "id": "receipt_replay",
+      "layer": "control",
+      "shape": "receipt -> recoverable state",
+      "use": "Make later sessions inherit evidence instead of vibes."
+    },
+    {
+      "id": "compress_before_expand",
+      "layer": "memory",
+      "shape": "raw corpus -> compact state -> targeted expansion",
+      "use": "Preserve useful evidence at lower token cost."
+    },
+    {
+      "id": "promote_what_repeats",
+      "layer": "memory",
+      "shape": "repeated packet -> doctrine|surface",
+      "use": "Turn recurring interaction moves into product primitives."
+    },
+    {
+      "id": "trace_packet",
+      "layer": "memory",
+      "shape": "intent -> route -> delta -> gate -> evidence -> receipt -> reuse",
+      "use": "Make agent work reusable instead of transcript-shaped."
+    },
+    {
+      "id": "context_transport",
+      "layer": "memory",
+      "shape": "stream files/context -> markdown/paste/browser text -> assimilation packet",
+      "use": "Move context across tools without making a heavy app."
+    },
+    {
+      "id": "intent_to_packet",
+      "layer": "execution",
+      "shape": "natural language -> typed packet",
+      "use": "Make current intent executable and checkable."
+    },
+    {
+      "id": "stable_verbs_disposable_workflows",
+      "layer": "execution",
+      "shape": "fixed verbs + throwaway runs",
+      "use": "Keep the system legible while allowing rapid experiments."
+    },
+    {
+      "id": "UTIR_materialization",
+      "layer": "execution",
+      "shape": "packet -> op tape -> gate -> effect -> receipt",
+      "use": "Make filesystem effects auditable."
+    },
+    {
+      "id": "flow_state_protection",
+      "layer": "operator",
+      "shape": "preserve user frame -> avoid generic reset",
+      "use": "Keep Codex aligned to the active operating representation."
+    }
+  ],
+  "discovery_tests": [
+    "auto_generation",
+    "necessity",
+    "violation_consequence",
+    "cross_substrate",
+    "prediction_power"
+  ],
+  "promotion_rule": {
+    "passes_5_of_5": "primitive_candidate",
+    "one_domain_only": "pattern",
+    "vibe_only": "hold"
+  },
+  "search_signatures": [
+    "we made",
+    "we managed",
+    "this solves",
+    "primitive",
+    "stream",
+    "paste",
+    "route",
+    "gate",
+    "packet",
+    "receipt",
+    "promote",
+    "compress",
+    "context",
+    "copy",
+    "workflow",
+    "UTIR"
+  ],
+  "next_move": "Use this atlas as first-turn assimilation vocabulary before answer/build/edit."
+}
